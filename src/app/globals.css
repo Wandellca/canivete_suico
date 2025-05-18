@@ -1,26 +1,45 @@
 @import "tailwindcss";
 
+.button {
+  background-color: #3498db;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #2980b9;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+   /* --border-style: solid;  DESCOMENTAR PARA TESTE */
+   --border-style: none; /*COMENTAR PARA TESTE */
+
+  --border-width-div: 2px;
+  --border-solid-div: solid;
+  --border-color-div: #EF4444;  
+
+  --border-width-main: 2px;
+  --border-solid-main: solid;
+  --border-color-main: #10b981; 
+
+  --border-width-nav: 2px;
+  --border-solid-nav: solid;
+  --border-color-nav: #6B7280; 
+
+  --body-bg: rgb(250 250 250);
+  --body-nav: #0000000a;
+  --body-footer: #22c55e;
+  --body-sidebar: #06b6d4;
+
+  --body-footer: #0000000a;
+  --body-sidebar: #0000000a;
+  --body-op:1; 
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.border-custom {
+  border-style: var(--border-style);
 }
