@@ -34,20 +34,10 @@ export default function RootLayout({
         }}
         >        
         <div 
-          className="flex flex-col min-h-screen sm:p-2 font-[family-name:var(--font-geist-sans)] border-custom"
-          style={{
-            borderWidth: "var(--border-width-div)",
-            borderColor: "var(--border-color-div)"             
-          }}
+          className="flex flex-col min-h-screen sm:p-2 font-[family-name:var(--font-geist-sans)]"      
         >          
-          <Sidebar />          
-          <main 
-            className="flex-1 p-3 md:p-3 border-custom"   
-            style={{
-              borderWidth: "var(--border-width-main)",
-              borderColor: "var(--border-color-main)"             
-            }}
-          >                     
+          <Sidebar/>   
+          <main className="flex-1 p-3 md:p-3">                     
             {children}            
           </main>     
           <Footer/> 

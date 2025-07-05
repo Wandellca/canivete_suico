@@ -15,8 +15,8 @@
 }
 
 :root {
-   /* --border-style: solid;  DESCOMENTAR PARA TESTE */
-   --border-style: none; /*COMENTAR PARA TESTE */
+  /* --border-style: solid;  DESCOMENTAR PARA TESTE */
+  --border-style: none; /*COMENTAR PARA TESTE */
 
   --border-width-div: 2px;
   --border-solid-div: solid;

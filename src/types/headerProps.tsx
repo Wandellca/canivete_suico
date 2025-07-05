@@ -3,13 +3,18 @@ export interface HeaderProps {
     subtitle?: string;
   }
 
+export interface ModalProps {    
+    mensagem: string;
+    isOpen: boolean;
+    onClose: () => void;
+  }
+
 export interface SearchProps {
   pesquisa: string;
-  resultados: string;
+  resultados: string[];
   loading: boolean;
   hasError: boolean;
 }
-
 
 export interface GerarProps {
   pesquisa: string;
@@ -18,6 +23,9 @@ export interface GerarProps {
   hasError: boolean;
 }
 
+export interface SidebarSearchProps {    
+    children: React.ReactNode;
+  }
 
 // // AJUSTAR  Estrutura do componente 
 // import React from "react";

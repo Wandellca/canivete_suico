@@ -4,13 +4,14 @@ import Image from 'next/image';
 import Form from 'next/form';
 import React, { useState } from "react";
 import { SearchProps } from "../types/headerProps";
+import SidebarSearch from '@/components/searchSidebar';
 
 export default function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Estado inicial
-  const toggleMobileMenu = () => {  
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  // Estado inicial 
+  const toggleMobileMenu = () => {      
+    setIsMobileMenuOpen(!isMobileMenuOpen);  
   };
 
   // Estado inicial
@@ -52,22 +53,23 @@ export default function Sidebar() {
       hasError: false, 
     }));
     
-    // Simulação de busca com atraso
+    // Simula um delay de 3 segundos (3000 ms)
     setTimeout(() => {
-    
-      // Simulação de pesquisa (use fetch ou outra API para buscar dados reais)
-      const mockResultados = [
-        "Resultado 1 relacionado a " + pesquisar.pesquisa,
-        "Resultado 2 relacionado a " + pesquisar.pesquisa,
-        "Resultado 3 relacionado a " + pesquisar.pesquisa,
-      ];
+      setPesquisar(prevState => {
+        // Aqui usamos prev.pesquisa pra não correr risco de closure stale
+        const resultados = [
+          `Resultado 1 relacionado a: ${prevState.pesquisa}`,
+          `Resultado 2 relacionado a: ${prevState.pesquisa}`,
+          `Resultado 3 relacionado a: ${prevState.pesquisa}`,
+        ];
 
-      setPesquisar((prevState)=>({
-        ...prevState,
-        resultados:mockResultados,
-        loading: false, // Desativa o carregamento
-      })); // Atualiza os resultados      
-    }, 100); // Simula um atraso de 3 segundos 
+        return {
+          ...prevState,
+          resultados,
+          loading: false,  // desativa o spinner
+        };
+      });
+    }, 1000);
   };
 
   const handleSearch = async () => {    
@@ -86,49 +88,50 @@ export default function Sidebar() {
       hasError: false, 
     }));
     
-    // Simulação de busca com atraso
+    // Simula um delay de 3 segundos (3000 ms)
     setTimeout(() => {
-    
-      // Simulação de pesquisa (use fetch ou outra API para buscar dados reais)
-      const mockResultados = [
-        "Resultado 1 relacionado a " + pesquisar.pesquisa,
-        "Resultado 2 relacionado a " + pesquisar.pesquisa,
-        "Resultado 3 relacionado a " + pesquisar.pesquisa,
-      ];
+      setPesquisar(prevState => {
+        // Aqui usamos prev.pesquisa pra não correr risco de closure stale
+        const resultados = [
+          `Resultado 1 relacionado a: ${prevState.pesquisa}`,
+          `Resultado 2 relacionado a: ${prevState.pesquisa}`,
+          `Resultado 3 relacionado a: ${prevState.pesquisa}`,
+        ];
 
-      setPesquisar((prevState)=>({
-        ...prevState,
-        resultados:mockResultados,
-        loading: false, // Desativa o carregamento
-      })); // Atualiza os resultados      
-    }, 3000); // Simula um atraso de 3 segundos
+        return {
+          ...prevState,
+          resultados,
+          loading: false,  // desativa o spinner
+        };
+      });
+    }, 1000);
   };
 
   const Load = () => (
     <>
-        {/* // Ícone de pesquisa quando não está carregando */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          aria-hidden="true"
-          className="h-4 cursor-pointer"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-          ></path>
-        </svg> 
+      {/* // Ícone de pesquisa quando não está carregando */}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        aria-hidden="true"
+        className="h-4 cursor-pointer"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+        ></path>
+      </svg> 
     </>
   );
 
 
  {/* Exibição dos resultados */}
   const ListarResultado = ()=>(   
-    <div className='bg-white border border-gray-400 rounded-2xl absolute top-1 right-0 left-0 shadow-2xl'>
+    <div className='bg-white border-gray-400 rounded-2xl absolute top-1 right-0 left-0 shadow-2xl'>
       <ul className="results-list">
         {pesquisar.resultados.length > 0 ? (
           pesquisar.resultados.map(
@@ -146,15 +149,64 @@ export default function Sidebar() {
     </div>
   );
 
+  const Nav = ()=>(
+    <>
+      <li>
+        <Link
+          className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+          href="/"
+          onClick={toggleMobileMenu}
+        >
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link
+          className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+          href="/encurtadorUrl"
+          onClick={toggleMobileMenu}
+        >
+          Encurtador Url
+        </Link>
+      </li>
+      <li>
+        <Link
+          className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+          href="/naoEncontrado"
+          onClick={toggleMobileMenu}
+        >
+          Conversor
+        </Link>
+      </li>
+    </>
+  );
+
+  const Entrada = () => (
+    <>
+      <input 
+        type="text" 
+        placeholder="Pesquise quais ferramentas..." 
+        autoComplete="off" 
+        className="text-md w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400" 
+        name="q"                             
+        onChange={handleInputChange} // Atualiza o estado ao digitar
+        value={pesquisar.pesquisa} // Vincula o valor ao estado
+      /> 
+      <div className="absolute right-0 top-0 mr-3 flex h-full items-center"
+        onClick={handleSearch} // Adiciona o evento de clique aqui
+      >
+        {Load()}                 
+      </div>
+    </>
+  );
+
   return (
     <nav 
-      className="relative flex items-center justify-between p-4 lg:px-3 border-custom"      
-      style={{
-        borderWidth: "var(--border-width-nav)",
-        borderColor: "var(--border-color-nav)",
+      className="relative flex items-center justify-between p-4 lg:px-3"      
+      style={{       
         backgroundColor: "var(--body-sidebar)"                  
       }}
-    >
+    >    
       <div className="block flex-none md:hidden">
         <button aria-label="Open mobile menu" 
           className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors md:hidden dark:border-neutral-700 dark:text-white"
@@ -169,58 +221,57 @@ export default function Sidebar() {
           </svg>
         </button>
       </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3">
-        <Link className="mr-2 flex w-full items-center justify-center sm:w-auto md:w-auto lg:mr-8" href="/">
-          <div className="flex flex-none items-center justify-center border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-black h-[48px] w-[96px] rounded-xl">
-            <Image className="h-[32px] w-[80px]" 
-              src="/next.svg" alt="Acme Store logo"           
-              width={80} height={32} 
-            />
-              </div>
-              <div className="ml-2 flex-none text-sm font-medium uppercase md:block">Canivete Suiço</div>            
-            </Link>
-            <ul className="hidden gap-4 text-sm sm:flex sm:items-center md:gap-6 lg:gap-8">
-              <li>
-                <Link className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300" href="/">Home</Link>
-              </li>
-              <li>
-                <Link className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300" href="/encurtadorUrl">Encurtador Url</Link>
-              </li>
-              <li>
-                <Link className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300" href="/naoEncontrado">Conversor</Link>
-              </li>
-              <li>
-                <Link className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300" href="/testeDeExample">Pagina de Testes</Link>
-              </li>
-            </ul>
+
+      <div className="flex w-full items-center">               
+        <div className="flex w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3">        
+          <Link className="mr-2 flex w-full items-center justify-center sm:w-auto md:w-auto lg:mr-8" href="/">
+            <div className="flex flex-none items-center justify-center border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-black h-[48px] w-[96px] rounded-xl">
+              <Image className="h-[32px] w-[80px]" 
+                src="/next.svg" alt="Acme Store logo"           
+                width={80} height={32} 
+              />
+            </div>
+            <div className="ml-2 flex-none text-sm font-medium uppercase md:block">Canivete Suiço</div>            
+          </Link>          
+          <ul className="hidden gap-4 text-sm sm:flex sm:items-center md:gap-6 lg:gap-8">          
+          {/* TODO: REMOVER REDUNCIA DE CODIGO  */}            
+            <li>
+              <Link
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                href="/"          
+              >
+                Home
+              </Link>
+            </li>            
+            <li>
+              <Link
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                href="/encurtadorUrl"             
+              >
+                Encurtador Url
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                href="/naoEncontrado"                
+              >
+                Conversor
+              </Link>
+            </li>            
+          </ul>          
         </div>
+       
         <div className="hidden justify-center md:flex sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <Form className="w-max-[50px] relative w-full lg:w-80 xl:w-full"
-             onSubmit={(e) => e.preventDefault()}
-             action="/search">
-            <input 
-              type="text" 
-              placeholder={
-                pesquisar.hasError
-                  ? "Por favor, digite algo para pesquisar!" // Mensagem de erro
-                  : "Digite sua pesquisa..."
-              }                
-              className="text-md w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"                           
-              style={{borderColor: pesquisar.hasError ? "red" : "gray",}}              
-              name="q"               
-              onChange={handleInputChange} // Atualiza o estado ao digitar
-              value={pesquisar.pesquisa} // Vincula o valor ao estado
-            /> 
-            <div className="absolute right-0 top-0 mr-3 flex h-full items-center"
-              onClick={handleSearch} // Adiciona o evento de clique aqui
-            >
-              {Load()}           
-            </div>
+            onSubmit={(e) => e.preventDefault()}
+            action="/search"
+          >
+            {Entrada()}
           </Form>
           {ListarResultado()}
         </div>
-
+        
         <div className="flex justify-end sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <button aria-label="Open cart"
             style={{
@@ -235,72 +286,36 @@ export default function Sidebar() {
             </div>
           </button>          
         </div> 
-      </div>        
+      </div>     
+    
       <div 
-        className={`fixed top-0 left-0 h-full w-full bg-white z-[9999] dark:bg-black transition-transform ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-full bg-white z-[9999] dark:bg-black transition-transform 
+          ${isMobileMenuOpen 
+            ? "translate-x-0" 
+            : "-translate-x-full"}`
+        }
       >
-          <div className="flex items-center gap-4 pt-4 pr-4 pl-4 pb-1">
-            <button
-              aria-label="Close mobile menu"
-              onClick={toggleMobileMenu}              
-              className="flex h-9 w-9 items-center justify-center rounded-md text-black transition-colors md:hidden dark:text-white"
-            >
+        <div className="flex items-center gap-4 pt-4 pr-4 pl-4 pb-1">
+          <button
+            aria-label="Close mobile menu"
+            onClick={toggleMobileMenu}              
+            className="flex h-9 w-9 items-center justify-center rounded-md text-black transition-colors md:hidden dark:text-white"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-left">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          <Form onSubmit={(e) => e.preventDefault()}
-            className="w-max-[50px] relative w-[85%] lg:w-80 xl:w-full" 
-            action="/search">
-            <input type="text" 
-              placeholder="Pesquise quais ferramentas..." 
-              autoComplete="off" 
-              className="text-md w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400" 
-              name="q"                             
-              onChange={handleInputChange} // Atualiza o estado ao digitar
-              value={pesquisar.pesquisa} // Vincula o valor ao estado
-              /> 
-            <div className="absolute right-0 top-0 mr-3 flex h-full items-center"
-            //  onClick={handleSearch} // Adiciona o evento de clique aqui
-            >
-              {Load()}                 
-            </div>
-          </Form>
+          <SidebarSearch>
+            {Entrada()}
+          </SidebarSearch>
           {ListarResultado()}
-          </div>
-          <ul className="flex flex-col gap-4 p-4">
-            <li>
-              <Link
-                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                href="/"
-                onClick={toggleMobileMenu}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                href="/encurtadorUrl"
-                onClick={toggleMobileMenu}
-              >
-                Encurtador Url
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                href="/naoEncontrado"
-                onClick={toggleMobileMenu}
-              >
-                Conversor
-              </Link>
-            </li>
-          </ul>
-        </div>      
-    </nav>
+        </div>
+        <ul className="flex flex-col gap-4 p-4">
+          {Nav()}
+        </ul>
+      </div>      
+    
+    </nav>   
   );
 }

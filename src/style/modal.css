@@ -1,0 +1,64 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: #fff;
+  border-radius: 10px;   
+  max-width: 350px;
+  width: 90%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem 1rem;
+  background: #ff9800; /* faixa laranja */  
+  position: relative;              /* para o botão ficar absoluto */
+  justify-content: center;         /* título sempre centralizado */
+}
+
+.close-button {
+  /* background: #e53935; */
+  border: none;
+  color: #000; 
+  font-size: 2.5rem; /*1.5rem;*/
+  font-weight: bold;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;       
+  right: 0.2rem;           
+}
+
+.modal-title {
+  flex: 1;
+  text-align: center; 
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.modal-body {
+  /* padding: 2.5rem 1rem;    */
+  padding: 0.5rem 1rem 2rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
+}

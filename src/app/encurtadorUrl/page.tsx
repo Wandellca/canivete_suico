@@ -4,6 +4,7 @@ import Form from 'next/form'
 import Header from "@/components/header";
 import { GerarProps } from "@/types/headerProps";
 import { postEncurtadorUrl } from "@/services/encurtadorurl";
+import Modal from '@/components/modal';
 
 
 export default function EncurtadorUrl() {
@@ -15,6 +16,9 @@ export default function EncurtadorUrl() {
     loading:false,
     hasError: false,
   });   
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -50,14 +54,31 @@ export default function EncurtadorUrl() {
       hasError: false, 
     }));
 
-    const mockResultados = await postEncurtadorUrl(pesquisar.pesquisa);    
-    setPesquisar((prevState)=>({
-      ...prevState,
-      resultados:mockResultados,
-      loading: false, // Desativa o carregamento
-    })); // Atualiza os resultados  
-    console.table(pesquisar.resultados)
+    try {
+      const mockResultados = await postEncurtadorUrl(pesquisar.pesquisa, serverMessage => {
+        setErrorMsg(serverMessage) 
+        setIsModalOpen(true)
+      })       
+      setPesquisar((prevState)=>({
+        ...prevState,
+        resultados:mockResultados,
+        loading: false, // Desativa o carregamento
+      })); // Atualiza os resultados     
+    } 
+    catch{  
+      setPesquisar((prevState)=>({
+        ...prevState,
+        resultados:"",
+        loading: false, // Desativa o carregamento
+        hasError: true, // Sinaliza erro
+      })); // Atualiza os resultados  
+    }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setErrorMsg('')
+  }
 
   const Load = () => (
     <>
@@ -101,16 +122,17 @@ export default function EncurtadorUrl() {
 
  {/* Exibição dos resultados */}
   const ListarResultado = ()=>(       
-    <ul className="results-list">
-      {pesquisar.resultados.length > 0 ? (
-        // pesquisar.resultados.map((result, index) => <li key={index}>{result}</li>)
-        <li>{pesquisar.resultados}</li>
-      ):(
-          // <li>Nenhum resultado encontrado.</li>
+    <div className="results-list">  
+        {pesquisar.resultados.length > 0 ?   (
+          <>
+            <p>Esse é seu novo link gerado para poder compartilhar em suas redes socias:</p> 
+            <a href={pesquisar.resultados} target="_blank">{pesquisar.resultados}</a>         
+          </>
+        ):(          
           <p></p>
         )
       }
-    </ul>
+       </div>
   );
 
   return (
@@ -130,23 +152,30 @@ export default function EncurtadorUrl() {
           <p style={{ fontSize: "16px" }}>Segurança:</p>
           <p style={{ fontSize: "14px" }}>Alguns encurtadores oferecem recursos de proteção contra links maliciosos, ajudando a evitar fraudes como phishing.</p>
           <p style={{ fontSize: "14px" }}>Isso é útil em plataformas com limitações de espaço, como redes sociais e mensagens de texto, ou quando se pretende facilitar a divulgação de um link.</p>                    
-          <Form action="/search"
+          <Form 
+            action="/search"
             className="w-max-[50px] relative w-full lg:w-80 xl:w-full pt-4"            
           >      
             <input 
-             type="text" 
-             name="query"               
-             className="text-md w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
-             value={pesquisar.pesquisa}
-             placeholder="Informe a Url ou Link"
-             onChange={handleInputChange}
+              className="text-md w-full rounded-lg border bg-white px-4 py-2 text-black placeholder:text-neutral-500 md:text-sm dark:border-neutral-800 dark:bg-transparent dark:text-white dark:placeholder:text-neutral-400"
+              type='url' 
+              name='inputEncurtadorUrl' 
+              value={pesquisar.pesquisa}            
+              onChange={handleInputChange}
+              min='21'
             />                        
-            <div className="pt-4 absolute right-0 top-0 mr-3 flex h-full items-center"
+            <div 
+              className="pt-4 absolute right-0 top-0 mr-3 flex h-full items-center"
               onClick={handleSearch} // Adiciona o evento de clique aqui
             >
               {Load()}           
             </div>      
           </Form>
+          <Modal 
+            isOpen={isModalOpen} 
+            onClose={closeModal} 
+            mensagem={errorMsg}    
+          />              
           {ListarResultado()}
         </main>              
       </div>
